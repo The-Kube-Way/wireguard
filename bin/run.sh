@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -eux
+set -eu
 
 # Setup interfaces
 INTERFACES=$(find /etc/wireguard -type f -name "*.conf")
@@ -11,6 +11,7 @@ fi
 
 for interface in $INTERFACES
 do
+    wg-quick down "$interface" || true
     echo "Starting Wireguard $interface..."
     wg-quick up "$interface"
 done
