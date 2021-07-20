@@ -37,11 +37,19 @@ spec:
         volumeMounts:
         - name: wireguard-conf
           mountPath: /etc/wireguard
+        - name: wireguard-port-forwarding
+          mountPath: /etc/wireguard-port-forwarding
       volumes:
       - name: wireguard-conf
         secret:
           secretName: wireguard-conf
           defaultMode: 0600
+      - name: wireguard-port-forwarding
+        configMap:
+          name: wireguard-port-forwarding
+          items:
+          - key: rules.conf
+            path: rules.conf
 
 ---
 apiVersion: v1
@@ -53,3 +61,15 @@ metadata:
 stringData:
   wg0.conf: |
     # Put your wireguard config here
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wireguard-port-forwarding
+  labels:
+    app: wireguard
+data:
+  rules.conf: |
+    VPN_INTERFACE CLIENT_IP PROTOCOL SRC_PORT [DEST_PORT]
+    e.g., wg0 10.0.0.2 tcp 80 80
