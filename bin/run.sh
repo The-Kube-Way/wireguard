@@ -75,5 +75,6 @@ trap 'exit 0' 15
 while true
 do
     wg show
-    sleep 60
+    sleep 60 &
+    wait $!
 done
