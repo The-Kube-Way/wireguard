@@ -19,7 +19,7 @@ done
 
 
 # Masquerade trafic from VPN
-ETH0_IP=$(ip address show dev eth0 | grep inet | awk '{print $2}' | cut -d/ -f 1)
+ETH0_IP=$(ip address show dev eth0 | grep 'inet ' | awk '{print $2}' | cut -d/ -f 1)
 if ! iptables -t nat -C POSTROUTING -o eth0 -j SNAT --to-source "$ETH0_IP" 2> /dev/null; then
     iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to-source "$ETH0_IP"
 fi
